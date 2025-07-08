@@ -1,220 +1,214 @@
- 
+<?php
+include_once '../koneksi.php';
+?>
 <!DOCTYPE html>
-<html>
-  <head>
+<html lang="id">
+<head>
     <meta charset="utf-8">
-    <meta name="X-UA-Compatible" content="IE=edge">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <title><?php echo $judul; ?></title>
+    <meta name="description" content="Admin Dashboard Nor'in">
+    <meta name="author" content="Naufal Wiyura">
+    <title><?php echo isset($judul) ? htmlspecialchars($judul) : "Data Rak"; ?></title>
 
-    <!-- boootstrap -->
     <link href="../vendor/css/bootstrap/bootstrap.min.css" rel="stylesheet">
-
-     <link href="../vendor/css/bootstrap/bootstrap.css" rel="stylesheet">
-
-    <!-- icon dan fonts -->
     <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- tema css -->
-    <link href="../css/tampilanadmin.css" rel="stylesheet">
+    <link href="../css/tampilanadmin-interactive.css" rel="stylesheet">
+</head>
+<body>
+    <div id="wrapper" class="admin-layout">
 
-  </head>
-  <body>
-    <!-- Menu -->
-    <div id="wrapper">
-
-      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-          <div class="navbar-header">
-            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-              <span class="sr-only">navigation</span> Menu <i class="fa fa-bars"></i>
-            </button>
-            <a class="navbar-brand">NOR'IN</a>
-          </div>
-          <?php 
-          $id = $_SESSION['idinv'];
-           include '../koneksi.php';
-           $sql = "SELECT * FROM tb_admin WHERE id_admin = '$id'";
-           $query = mysqli_query($koneksi, $sql);
-            $r = mysqli_fetch_array($query);
-
-           ?>
+        <nav class="navbar admin-navbar navbar-fixed-top" role="navigation">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target=".admin-sidebar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand" href="?m=awal.php">NOR'IN</a>
+            </div>
+            <?php
+            $nama_user_display = 'Pengguna';
+            $foto_user_display = '../images/default-avatar.png';
+            if (isset($_SESSION['idinv']) && isset($koneksi)) {
+                $id_admin_session = $_SESSION['idinv'];
+                $sql_user = "SELECT nama, foto FROM tb_admin WHERE id_admin = ?";
+                $stmt_user = mysqli_prepare($koneksi, $sql_user);
+                mysqli_stmt_bind_param($stmt_user, "s", $id_admin_session);
+                mysqli_stmt_execute($stmt_user);
+                $result_user = mysqli_stmt_get_result($stmt_user);
+                if ($user_data = mysqli_fetch_array($result_user)) {
+                    $nama_user_display = htmlspecialchars($user_data['nama']);
+                    if (!empty($user_data['foto']) && file_exists('../images/admin/' . $user_data['foto'])) {
+                        $foto_user_display = '../images/admin/' . htmlspecialchars($user_data['foto']);
+                    }
+                }
+                mysqli_stmt_close($stmt_user);
+            }
+            ?>
             <ul class="nav navbar-top-links navbar-right">
-            <li class="dropdown">
-              <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-               <img src="../images/admin/<?php echo $r['foto']; ?>" height="50"></i> <?php echo $r['nama']; ?>
-              </a>
-              <ul class="dropdown-menu dropdown-user">
-                <li>
-                  <form class="" action="logout.php" onclick="return confirm('yakin ingin logout?');" method="post">
-                    <button class="btn btn-default" type="submit" name="keluar"><i class="fa fa-sign-out"></i> Logout</button>
-                  </form>
+                <li class="dropdown user-menu">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-haspopup="true" aria-expanded="false">
+                        <img src="<?php echo $foto_user_display; ?>" class="user-avatar" alt="Avatar">
+                        <span class="username hidden-xs"><?php echo $nama_user_display; ?></span> <i class="fa fa-caret-down icon-caret"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right user-dropdown-menu">
+                        <li><a href="#"><i class="fa fa-user fa-fw"></i> Profil</a></li>
+                        <li><a href="#"><i class="fa fa-cog fa-fw"></i> Pengaturan</a></li>
+                        <li class="divider"></li>
+                        <li>
+                            <form action="logout.php" method="post" style="margin:0;">
+                                <button type="submit" name="keluar" class="btn-logout-link" onclick="return confirm('Yakin ingin logout?');">
+                                    <i class="fa fa-sign-out fa-fw"></i> Logout
+                                </button>
+                            </form>
+                        </li>
+                    </ul>
                 </li>
-              </ul>
-            </li>
-          </ul>
-
-        <!-- menu samping -->
-        <div class="navbar-default sidebar" role="navigation">
-          <div class="sidebar-nav navbar-collapse">
-            <ul class="nav" id="side-menu">
-                          <li>
-                <a href="?m=awal.php">
-                  <i class="fa fa-dashboard"></i> Beranda
-                </a>
-              </li>
-              <li>
-                <a href="?m=admin&s=awal">
-                  <i class="fa fa-user"></i> Data Admin
-                </a>
-              </li>
-               <li>
-                <a href="?m=petugas&s=awal">
-                  <i class="fa fa-users"></i> Data Petugas
-                </a>
-              </li>
-                            <li>
-                <a href="?m=supplier&s=awal">
-                  <i class="fa fa-building"></i> Data Supplier
-                </a>
-              </li>
-                            <li>
-                <a href="?m=rak&s=awal">
-                  <i class="fa fa-cubes"></i> Data Rak
-                </a>
-              </li>
-                            <li>
-                <a href="?m=barang&s=awal">
-                  <i class="fa fa-archive"></i> Data Barang
-                </a>
-              </li>
-
-                            <li>
-                <a href="?m=barangKeluar&s=awal">
-                  <i class="fa fa-cart-arrow-down"></i> Data Barang Keluar
-                </a>
-              </li>
-              <li>
-                <a href="logout.php">
-                  <i class="fa fa-warning"></i> Logout
-                </a>
-              </li>
-              
             </ul>
-          </div>
-        </div>
 
-      </nav>
+            <div class="admin-sidebar admin-sidebar-collapse" role="navigation">
+                <div class="sidebar-nav">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-brand-item">
+                            <a href="?m=awal.php" class="sidebar-brand-link">
+                                <i class="fa fa-cubes brand-icon"></i>
+                                <span class="brand-text">NOR'IN INV</span>
+                            </a>
+                        </li>
+                        <li class="nav-header">MENU UTAMA</li>
+                        <li><a href="?m=awal.php" class="<?php echo (!isset($_GET['m']) || $_GET['m'] == 'awal.php') ? 'active' : ''; ?>"><i class="fa fa-dashboard fa-fw"></i><span>Beranda</span></a></li>
+                        <li><a href="?m=admin&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'admin') ? 'active' : ''; ?>"><i class="fa fa-user fa-fw"></i><span>Data Admin</span></a></li>
+                        <li><a href="?m=petugas&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'petugas') ? 'active' : ''; ?>"><i class="fa fa-users fa-fw"></i><span>Data Petugas</span></a></li>
+                        <li><a href="?m=supplier&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'supplier') ? 'active' : ''; ?>"><i class="fa fa-building fa-fw"></i><span>Data Supplier</span></a></li>
+                        <li><a href="?m=rak&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'rak') ? 'active' : ''; ?>"><i class="fa fa-cubes fa-fw"></i><span>Data Rak</span></a></li>
+                        <li><a href="?m=barang&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'barang') ? 'active' : ''; ?>"><i class="fa fa-archive fa-fw"></i><span>Data Barang</span></a></li>
+                        <li><a href="?m=barangKeluar&s=awal" class="<?php echo (isset($_GET['m']) && $_GET['m'] == 'barangKeluar') ? 'active' : ''; ?>"><i class="fa fa-cart-arrow-down fa-fw"></i><span>Barang Keluar</span></a></li>
+                        <li class="nav-header">AKUN</li>
+                        <li><a href="logout.php" onclick="return confirm('Yakin ingin logout?')"><i class="fa fa-sign-out fa-fw"></i><span>Logout</span></a></li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
 
-      <div id="page-wrapper">
-        <div class="row">
-          <div class="col-lg-12">
-            <h1 class="page-header">Data Rak</h1>
-          </div>
-        </div>
+        <div id="page-content-wrapper">
+            <div class="container-fluid">
+                <div class="row page-header-container">
+                    <div class="col-lg-8">
+                        <h1 class="page-title">Data Rak</h1>
+                        <p class="page-subtitle">Manajemen data lokasi penyimpanan barang di gudang.</p>
+                    </div>
+                    <div class="col-lg-4 text-right action-buttons-container">
+                        <button type="button" class="btn btn-primary btn-icon-split" data-toggle="modal" data-target="#addRakModal">
+                            <span class="icon text-white-50"><i class="fa fa-plus"></i></span>
+                            <span class="text">Tambah Rak</span>
+                        </button>
+                    </div>
+                </div>
 
-        <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
-  Tambah data
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLongTitle">Tambah data rak</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <form action="?m=rak&s=simpan" method="POST" enctype="multipart/form-data">
-        <div class="form-group">
-    <label for="exampleInputEmail1">Nama</label>
-    <input type="text" class="form-control" id="exampleInputEmail1" name="nama_rak" aria-describedby="emailHelp" placeholder="Masukkan Nama Rak">
-    <small id="emailHelp" class="form-text text-muted">Masukkan Nama Rak</small>
-  </div>
-  
-
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-        <button type="submit" name="simpan" class="btn btn-primary">Save changes</button>
-      </div>
-        </form>
-    </div>
-  </div>
-</div>
-
-         <div class="row">
-
-                                <div class="table-responsive table--no-card m-b-30">
-                                    <table class="table table-borderless table-striped table-earning">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <div class="card shadow-sm data-table-card">
+                            <div class="card-header">
+                                <h6 class="m-0 font-weight-bold text-primary">Daftar Rak Penyimpanan</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover interactive-table" id="rakDataTable" width="100%" cellspacing="0">
                                         <thead>
                                             <tr>
-                                                
-                                 <th>Id Rak</th>
-                                 <th>Nama Rak</th>
-                                
-                                
-                                <th>Aksi</th>
-                                                
+                                                <th>No</th>
+                                                <th>ID Rak</th>
+                                                <th>Nama Rak</th>
+                                                <th class="text-center">Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                           
-                                           <?php 
-                                          
-                                            include 'paging.php';
-
+                                            <?php
+                                            if (isset($koneksi)) {
+                                                // Assuming 'paging.php' is adapted for rack data
+                                                include 'paging.php';
+                                            } else {
+                                                echo "<tr><td colspan='4' class='text-center'>Koneksi database tidak tersedia.</td></tr>";
+                                            }
                                             ?>
                                         </tbody>
                                     </table>
-                                    
-                                                                 <center><ul class="pagination justify-content-center">
-                <li class="page-item">
-                    <a class="page-link" <?php if($halaman > 1){ echo "href='?m=rak&s=awal&halaman=$previous'"; } ?>>Previous</a>
-                </li>
-                <?php 
-                for($x=1;$x<=$total_halaman;$x++){
-                    ?> 
-                    <li class="page-item"><a class="page-link" href="?m=rak&s=awal&halaman=<?php echo $x ?>"><?php echo $x; ?></a></li>
-                    <?php
-                }
-                ?>              
-                <li class="page-item">
-                    <a  class="page-link" <?php if($halaman < $total_halaman) { echo "href='?m=rak&s=awal&halaman=$next'"; } ?>>Next</a>
-                </li>
-            </ul>
-              </center> 
                                 </div>
+                                <?php if (isset($total_halaman) && $total_halaman > 1 && isset($koneksi)): ?>
+                                <nav aria-label="Page navigation" class="mt-4">
+                                    <ul class="pagination justify-content-center">
+                                        <li class="page-item <?php if($halaman <= 1){ echo 'disabled'; } ?>">
+                                            <a class="page-link" href="<?php if($halaman > 1){ echo "?m=rak&s=awal&halaman=$previous"; } else { echo '#';} ?>">Previous</a>
+                                        </li>
+                                        <?php for($x=1; $x<=$total_halaman; $x++): ?>
+                                        <li class="page-item <?php if($halaman == $x) {echo 'active';} ?>">
+                                            <a class="page-link" href="?m=rak&s=awal&halaman=<?php echo $x ?>"><?php echo $x; ?></a>
+                                        </li>
+                                        <?php endfor; ?>
+                                        <li class="page-item <?php if($halaman >= $total_halaman) {echo 'disabled';} ?>">
+                                            <a class="page-link" href="<?php if($halaman < $total_halaman) { echo "?m=rak&s=awal&halaman=$next"; } else {echo '#';} ?>">Next</a>
+                                        </li>
+                                    </ul>
+                                </nav>
+                                <?php endif; ?>
                             </div>
-
-
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div></div><div class="modal fade" id="addRakModal" tabindex="-1" role="dialog" aria-labelledby="addRakModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content interactive-modal">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addRakModalLabel">Tambah Data Rak Baru</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <form action="?m=rak&s=simpan" method="POST" class="needs-validation" novalidate>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="nama_rak">Nama Rak <span class="text-danger">*</span></label>
+                    <input type="text" class="form-control" id="nama_rak" name="nama_rak" placeholder="Contoh: Rak A-01" required>
+                    <div class="invalid-feedback">Nama rak wajib diisi.</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Batal</button>
+              <button type="submit" name="simpan" class="btn btn-primary">Simpan Data</button>
+            </div>
+          </form>
+        </div>
       </div>
     </div>
 
-
-    <!-- Footer -->
-    <footer class="text-center">
-      <div class="footer-below">
-        <div class="container">
-          <div class="row">
-            <div class="col-lg-12">
-            <p class="text-muted" style="font-size: 16px;">Copyright &copy; <script>document.write(new Date().getFullYear());</script> naufal wiyura. All rights reserved</p>
-            </div>
-          </div>
-        </div>
+    <footer class="admin-footer">
+      <div class="container-fluid">
+        <p>Copyright © <script>document.write(new Date().getFullYear());</script> Naufal Wiyura. All rights reserved.</p>
       </div>
     </footer>
 
-    <!-- jQuery -->
     <script src="../vendor/jquery/jquery.min.js"></script>
-
-    <!--include-->
-    <script src="../vendor/css/js/bootstrap.min.js"></script>
-
-  </body>
+    <script src="../vendor/js/bootstrap.bundle.min.js"></script>
+    <script>
+    // Script for Bootstrap form validation
+    (function() {
+      'use strict';
+      window.addEventListener('load', function() {
+        var forms = document.getElementsByClassName('needs-validation');
+        var validation = Array.prototype.filter.call(forms, function(form) {
+          form.addEventListener('submit', function(event) {
+            if (form.checkValidity() === false) {
+              event.preventDefault();
+              event.stopPropagation();
+            }
+            form.classList.add('was-validated');
+          }, false);
+        });
+      }, false);
+    })();
+    </script>
+</body>
 </html>

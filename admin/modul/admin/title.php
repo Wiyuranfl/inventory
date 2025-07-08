@@ -1,4 +1,6 @@
- 
+<?php
+include_once '../koneksi.php';
+?>
 <!DOCTYPE html>
 <html lang="id">
   <head>
