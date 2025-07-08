@@ -1,0 +1,258 @@
+/* ../css/tampilanadmin.css */
+
+/* --- Variabel Warna (Untuk kemudahan kustomisasi) --- */
+:root {
+  --primary-color: #5e72e4; /* Biru modern yang sering dipakai */
+  --secondary-color: #f4f5f7; /* Abu-abu muda untuk background */
+  --text-color: #525f7f; /* Warna teks utama */
+  --heading-color: #32325d; /* Warna untuk heading */
+  --border-color: #dee2e6; /* Warna border halus */
+  --sidebar-bg: #111c44; /* Background sidebar gelap */
+  --sidebar-text: #adb5bd;
+  --sidebar-text-hover: #ffffff;
+  --sidebar-active-bg: #060c24;
+  --card-shadow: 0 0 2rem 0 rgba(136, 152, 170, .15); /* Bayangan halus untuk card */
+  --white-color: #ffffff;
+  --danger-color: #f5365c;
+  --warning-color: #fb6340;
+  --success-color: #2dce89;
+  --info-color: #11cdef;
+}
+
+/* --- Reset dan Dasar --- */
+body {
+  font-family: 'Open Sans', sans-serif; /* Menggunakan Open Sans */
+  background-color: var(--secondary-color);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+a {
+  color: var(--primary-color);
+  transition: all 0.3s ease;
+}
+a:hover, a:focus {
+  color: darken(var(--primary-color), 10%);
+  text-decoration: none;
+}
+
+h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: 'Montserrat', sans-serif; /* Font berbeda untuk heading */
+  color: var(--heading-color);
+  font-weight: 600;
+}
+
+/* --- Wrapper Utama --- */
+#wrapper {
+  display: flex;
+  width: 100%;
+  align-items: stretch;
+}
+
+/* --- Navbar Atas --- */
+.navbar-default {
+  background-color: var(--white-color);
+  border-bottom: 1px solid var(--border-color);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 0; /* Hapus margin bawah default */
+}
+
+.navbar-brand {
+  color: var(--primary-color) !important;
+  font-weight: bold;
+  font-size: 22px;
+  padding: 15px 15px;
+  height: auto; /* Sesuaikan jika perlu */
+}
+
+.navbar-toggle {
+  border-color: var(--border-color);
+  padding: 10px 10px;
+  margin-top: 12px;
+  margin-right: 15px;
+  margin-bottom: 12px;
+}
+.navbar-toggle .icon-bar {
+  background-color: var(--primary-color);
+}
+
+.navbar-top-links > li > a {
+  color: var(--text-color);
+  padding: 15px; /* Sesuaikan padding jika perlu */
+  min-height: 50px; /* Sesuaikan dengan tinggi gambar admin */
+}
+.navbar-top-links > li > a img {
+  max-height: 30px; /* Sesuaikan ukuran gambar admin */
+  width: auto;
+  border-radius: 50%;
+  margin-right: 8px;
+  vertical-align: middle;
+}
+.navbar-top-links > li > a:hover,
+.navbar-top-links > li > a:focus {
+  background-color: var(--secondary-color);
+}
+
+.navbar-top-links .dropdown-menu {
+  border-radius: 4px;
+  box-shadow: var(--card-shadow);
+  border: 1px solid var(--border-color);
+}
+.navbar-top-links .dropdown-menu li a,
+.navbar-top-links .dropdown-menu .btn-default {
+  padding: 10px 20px;
+  color: var(--text-color);
+}
+.navbar-top-links .dropdown-menu .btn-default {
+    width: 100%;
+    text-align: left;
+    background: transparent;
+    border: none;
+}
+.navbar-top-links .dropdown-menu .btn-default:hover {
+  background-color: var(--secondary-color);
+  color: var(--primary-color);
+}
+
+/* --- Sidebar (Menu Samping) --- */
+.sidebar {
+  background-color: var(--sidebar-bg);
+  padding-top: 0; /* Hilangkan padding atas jika navbar sudah ada */
+  min-height: calc(100vh - 51px); /* Tinggi sidebar - tinggi navbar */
+  /* position: fixed; Jika ingin sidebar tetap saat scroll konten */
+  /* width: 250px; Sesuaikan lebar sidebar */
+}
+
+#side-menu > li > a {
+  color: var(--sidebar-text);
+  padding: 15px 20px;
+  font-weight: 500;
+  border-left: 3px solid transparent; /* Indikator aktif */
+}
+#side-menu > li > a:hover,
+#side-menu > li > a:focus {
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-text-hover);
+  text-decoration: none;
+}
+#side-menu > li.active > a { /* Untuk link aktif, jika Anda menambah class 'active' via JS/PHP */
+  background-color: var(--sidebar-active-bg);
+  color: var(--sidebar-text-hover);
+  border-left-color: var(--primary-color);
+}
+#side-menu > li > a .fa {
+  margin-right: 10px;
+}
+
+/* --- Page Wrapper (Konten Utama) --- */
+#page-wrapper {
+  padding: 25px; /* Beri padding lebih */
+  background-color: var(--secondary-color);
+  min-height: calc(100vh - 51px); /* Tinggi konten - tinggi navbar */
+  width: 100%; /* Agar mengisi sisa ruang jika sidebar fixed */
+}
+
+.page-header {
+  margin-top: 0;
+  padding-bottom: 15px;
+  margin-bottom: 25px;
+  border-bottom: 1px solid var(--border-color);
+  font-size: 24px;
+  color: var(--heading-color);
+}
+
+/* --- Panel / Card Styling --- */
+.panel {
+  border: none; /* Hilangkan border default bootstrap */
+  border-radius: 0.5rem; /* Sudut lebih membulat */
+  box-shadow: var(--card-shadow);
+  margin-bottom: 30px;
+  transition: all 0.3s ease-in-out;
+}
+.panel:hover {
+  transform: translateY(-5px); /* Efek angkat saat hover */
+  box-shadow: 0 0.75rem 1.5rem rgba(136,152,170,.25);
+}
+
+.panel-heading {
+  background-color: var(--white-color) !important; /* Paksa background putih */
+  color: var(--heading-color) !important;
+  border-bottom: 1px solid var(--border-color);
+  padding: 1.25rem 1.5rem;
+  border-top-left-radius: 0.5rem;
+  border-top-right-radius: 0.5rem;
+}
+/* Menghilangkan warna spesifik panel bawaan Bootstrap, ganti dengan ikon atau border jika perlu */
+.panel-yellow .panel-heading,
+.panel-red .panel-heading {
+  background-color: var(--white-color) !important;
+}
+
+/* Kustomisasi warna ikon di panel jika ingin berbeda per panel */
+.panel-yellow .fa-5x { color: var(--warning-color); }
+.panel-red .fa-5x { color: var(--danger-color); }
+/* Jika ingin warna ikon seragam */
+.panel .fa-5x {
+  color: var(--primary-color); /* atau warna lain */
+  opacity: 0.7;
+}
+
+.panel-heading .col-xs-9 h3 {
+  margin-top: 0;
+  font-size: 2rem; /* Perbesar angka statistik */
+  color: var(--heading-color);
+  font-weight: 700;
+}
+.panel-heading .col-xs-9 div {
+  color: var(--text-color);
+  font-size: 0.9rem;
+}
+
+.panel-footer {
+  background-color: var(--white-color);
+  border-top: 1px solid var(--border-color);
+  padding: 1rem 1.5rem;
+  border-bottom-left-radius: 0.5rem;
+  border-bottom-right-radius: 0.5rem;
+}
+.panel-footer a, .panel-footer span {
+  color: var(--primary-color);
+  font-weight: 500;
+}
+.panel-footer a:hover {
+  color: darken(var(--primary-color), 10%);
+}
+
+
+/* --- Footer --- */
+footer.text-center {
+  background-color: var(--white-color);
+  padding: 20px 0;
+  border-top: 1px solid var(--border-color);
+  margin-top: 30px; /* Beri jarak dari konten di atasnya */
+}
+footer .text-muted {
+  color: var(--text-color) !important;
+  font-size: 0.9em;
+}
+
+/* --- Penyesuaian Responsif (Bootstrap sudah menangani sebagian besar) --- */
+@media (max-width: 768px) {
+  .sidebar {
+    /* position: static;  Jika Anda menggunakan position: fixed untuk sidebar di desktop */
+    /* width: 100%; */
+    min-height: auto;
+  }
+  #page-wrapper {
+    padding: 15px;
+  }
+  .navbar-brand {
+    font-size: 20px;
+  }
+  .panel-heading .col-xs-3 .fa-5x {
+      font-size: 3em; /* Kecilkan ikon di mobile */
+  }
+  .panel-heading .col-xs-9 h3 {
+      font-size: 1.5rem; /* Kecilkan angka statistik di mobile */
+  }
+}
