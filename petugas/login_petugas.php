@@ -41,7 +41,7 @@
                 <h1 class="panel-title text-center">Masuk</h1>
               </div>
               <div class="panel-body">
-              	<form class="form" action="pro_login_admin.php" method="post">
+              	<form class="form" action="pro_login_petugas.php" method="post">
                   <div class="form-group input-group">
                     <span class="input-group-addon"><i class="fa fa-laptop"></i></span>
                     <input class="form-control" type="text" name="user" required="" placeholder="Masukkan username Anda">
